@@ -3,6 +3,14 @@ var router = express.Router();
 var {OAuth2Client} = require('google-auth-library');
 var CLIENT_ID = "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com"
 var client= new OAuth2Client(CLIENT_ID);
+var session =require('express-session');
+var FileStore=require('session-file-store')(session);
+router.use(session({
+    secret: '209',  // 암호화
+    resave: false,
+    saveUninitialized: true,
+    store: new FileStore()
+}))
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -30,7 +38,16 @@ router.post('/index', (req, res) => {
 
 router.get('/login', checkAuthenticated, (req,res )=>{
   let user=req.user;
-  res.render('login', {user})
+  req.session.user=user;
+  res.render('login', {user:req.session.user})
+});
+
+router.post('/login' ,(req, res)=>{
+
+    console.log(req.body.nickname);
+    console.log(req.body.age);
+    console.log(req.body.gender);
+    return res.render('login', {user:req.session.user})
 });
 module.exports = router;
 
@@ -58,7 +75,7 @@ function checkAuthenticated(req, res, next){
         next();
       })
       .catch(err=>{
-        res.redirect('/login')
+        res.redirect('/index')
       })
 
 }
