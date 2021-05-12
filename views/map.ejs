@@ -12,13 +12,40 @@
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee"
     ></script>
     <script>
-      const mapContainer = document.getElementById("map"),
+      var lat = "";
+      var lon = "";
+
+      var mapContainer = document.getElementById("map"),
         mapOption = {
-          center: new kakao.maps.LatLng(37.2477502, 127.078164),
+          center: new kakao.maps.LatLng(36.2477502, 127.078164),
           level: 3,
         };
 
-      const map = new kakao.maps.Map(mapContainer, mapOption);
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          lat = position.coords.latitude;
+          lon = position.coords.longitude;
+
+          var locPosition = new kakao.maps.LatLng(lat, lon);
+
+          displayMarker(locPosition);
+        });
+      } else {
+        var locPosition = new kakao.maps.LatLng(36.2477502, 127.078164);
+
+        displayMarker(locPosition);
+      }
+
+      function displayMarker(locPosition) {
+        var marker = new daum.maps.Marker({
+          map: map,
+          position: locPosition,
+        });
+
+        map.setCenter(locPosition);
+      }
     </script>
   </body>
 </html>
