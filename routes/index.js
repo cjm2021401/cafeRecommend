@@ -170,8 +170,6 @@ function checkAuthenticated(req, res, next) {
       res.redirect("/index");
     });
 }
-<<<<<<< HEAD
-=======
 
 router.get("/map", (req, res) => {
   console.log(req.session.user);
@@ -183,4 +181,3 @@ router.get('/logout',function(req,res){
   req.session.destroy();  //세션비우기
   res.redirect('/');
 });
->>>>>>> 725445bde095435f47f8bc948873818794f00365
