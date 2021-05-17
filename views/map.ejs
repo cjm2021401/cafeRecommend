@@ -30,20 +30,15 @@
 
           var locPosition = new kakao.maps.LatLng(lat, lon);
 
-          displayMarker(locPosition);
+          displayCurrentPosition(locPosition);
         });
       } else {
         var locPosition = new kakao.maps.LatLng(36.2477502, 127.078164);
 
-        displayMarker(locPosition);
+        displayCurrentPosition(locPosition);
       }
 
-      function displayMarker(locPosition) {
-        var marker = new daum.maps.Marker({
-          map: map,
-          position: locPosition,
-        });
-
+      function displayCurrentPosition(locPosition) {
         map.setCenter(locPosition);
       }
     </script>
