@@ -22,8 +22,15 @@
 
     <input type="submit" value="Submit">
 </form>
-<a href="/index" onclick="signOut();">Sign Out</a>
+<a href="/logout" onclick="signOut();">Sign Out</a>
+<%if (message=='same nickname'){%>
+    <script type="text/javascript">
 
+        alert("입력하신 NICKNAME은 사용하지 못합니다." +
+            "다른 NICKNAME을 입력하여 주세요");
+
+    </script>
+<%}%>
 
 </body>
 <script>
