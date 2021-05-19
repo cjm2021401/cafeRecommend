@@ -1,19 +1,167 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>KaKao Map</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Cafe Map</title>
+    <style>
+      .map_wrap,
+      .map_wrap * {
+        margin: 0;
+        padding: 0;
+        font-family: "Malgun Gothic", dotum, "돋움", sans-serif;
+        font-size: 12px;
+      }
+      .map_wrap {
+        position: relative;
+        width: 100%;
+        height: 350px;
+      }
+      #category {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border-radius: 5px;
+        border: 1px solid #909090;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        background: #fff;
+        overflow: hidden;
+        z-index: 2;
+      }
+      #category li {
+        float: left;
+        list-style: none;
+        width: 50px;
+        border-right: 1px solid #acacac;
+        padding: 6px 0;
+        text-align: center;
+        cursor: pointer;
+      }
+      #category li.on {
+        background: #eee;
+      }
+      #category li:hover {
+        background: #ffe6e6;
+        border-left: 1px solid #acacac;
+        margin-left: -1px;
+      }
+      #category li:last-child {
+        margin-right: 0;
+        border-right: 0;
+      }
+      #category li span {
+        display: block;
+        margin: 0 auto 3px;
+        width: 27px;
+        height: 28px;
+      }
+      #category li .category_bg {
+        background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png)
+          no-repeat;
+      }
+      #category li .bank {
+        background-position: -10px 0;
+      }
+      #category li .mart {
+        background-position: -10px -36px;
+      }
+      #category li .pharmacy {
+        background-position: -10px -72px;
+      }
+      #category li .oil {
+        background-position: -10px -108px;
+      }
+      #category li .cafe {
+        background-position: -10px -144px;
+      }
+      #category li .store {
+        background-position: -10px -180px;
+      }
+      #category li.on .category_bg {
+        background-position-x: -46px;
+      }
+      .placeinfo_wrap {
+        position: absolute;
+        bottom: 28px;
+        left: -150px;
+        width: 300px;
+      }
+      .placeinfo {
+        position: relative;
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        background: #fff;
+      }
+      .placeinfo:nth-of-type(n) {
+        border: 0;
+        box-shadow: 0px 1px 2px #888;
+      }
+      .placeinfo_wrap .after {
+        content: "";
+        position: relative;
+        margin-left: -12px;
+        left: 50%;
+        width: 22px;
+        height: 12px;
+        background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
+      }
+      .placeinfo a,
+      .placeinfo a:hover,
+      .placeinfo a:active {
+        color: #fff;
+        text-decoration: none;
+      }
+      .placeinfo a,
+      .placeinfo span {
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .placeinfo span {
+        margin: 5px 5px 0 5px;
+        cursor: default;
+        font-size: 13px;
+      }
+      .placeinfo .title {
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 6px 6px 0 0;
+        margin: -1px -1px 0 -1px;
+        padding: 10px;
+        color: #fff;
+        background: #d95050;
+        background: #d95050
+          url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png)
+          no-repeat right 14px center;
+      }
+      .placeinfo .tel {
+        color: #0f7833;
+      }
+      .placeinfo .jibun {
+        color: #999;
+        font-size: 11px;
+        margin-top: 0;
+      }
+    </style>
   </head>
   <body>
     <div id="map" style="width: 100%; height: 575px"></div>
 
     <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee&libraries=services"
     ></script>
     <script>
       var lat = "";
       var lon = "";
+
+      var placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
+      var contentNode = document.createElement("div");
+      var markers = [];
+      var currCategory = "CE7"; // 카테고리코드: 카페
+      var order = 1;
 
       var mapContainer = document.getElementById("map"),
         mapOption = {
@@ -23,6 +171,26 @@
 
       var map = new kakao.maps.Map(mapContainer, mapOption);
 
+      var ps = new kakao.maps.services.Places(map);
+
+      kakao.maps.event.addListener(map, "idle", searchPlaces);
+
+      contentNode.className = "placeinfo_wrap";
+
+      addEventHandle(contentNode, "mousedown", kakao.maps.event.preventMap);
+      addEventHandle(contentNode, "touchstart", kakao.maps.event.preventMap);
+
+      placeOverlay.setContent(contentNode);
+
+      function addEventHandle(target, type, callback) {
+        if (target.addEventListener) {
+          target.addEventListener(type, callback);
+        } else {
+          target.attachEvent("on" + type, callback);
+        }
+      }
+
+      placeOverlay.setContent(contentNode);
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           lat = position.coords.latitude;
@@ -40,6 +208,108 @@
 
       function displayCurrentPosition(locPosition) {
         map.setCenter(locPosition);
+      }
+
+      kakao.maps.event.addListener(map, "idle", searchPlaces);
+
+      function searchPlaces() {
+        if (!currCategory) {
+          return;
+        }
+        placeOverlay.setMap(null);
+
+        ps.categorySearch(currCategory, placesSearchCB, { usemapBounds: true });
+      }
+
+      function placesSearchCB(data, status, pagination) {
+        if (status === kakao.maps.services.Status.OK) {
+          displayPlaces(data);
+        }
+      }
+
+      function displayPlaces(places) {
+        for (var i = 0; i < places.length; i++) {
+          var marker = addMarker(
+            new kakao.maps.LatLng(places[i].y, places[i].x),
+            order
+          );
+
+          (function (marker, place) {
+            kakao.maps.event.addListener(marker, "click", function () {
+              displayPlaceInfo(place);
+            });
+          })(marker, places[i]);
+        }
+      }
+
+      function addMarker(position, order) {
+        var imageSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png";
+        var imageSize = new kakao.maps.Size(27, 30);
+        var imgOptions = {
+          spriteSize: new kakao.maps.Size(72, 220),
+          spriteOrigin: new kakao.maps.Point(46, 150),
+          offset: new kakao.maps.Point(11, 28),
+        };
+        var markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imgOptions
+        );
+
+        var marker = new kakao.maps.Marker({
+          position: position,
+          image: markerImage,
+        });
+
+        marker.setMap(map);
+        markers.push(marker);
+
+        return marker;
+      }
+
+      function displayPlaceInfo(place) {
+        var content =
+          '<div class="placeinfo">' +
+          '   <a class="title" href="' +
+          place.place_url +
+          '" target="_blank" title="' +
+          place.place_name +
+          '">' +
+          place.place_name +
+          "</a>";
+
+        if (place.road_address_name) {
+          content +=
+            '    <span title="' +
+            place.road_address_name +
+            '">' +
+            place.road_address_name +
+            "</span>" +
+            '  <span class="jibun" title="' +
+            place.address_name +
+            '">(지번 : ' +
+            place.address_name +
+            ")</span>";
+        } else {
+          content +=
+            '    <span title="' +
+            place.address_name +
+            '">' +
+            place.address_name +
+            "</span>";
+        }
+
+        content +=
+          '    <span class="tel">' +
+          place.phone +
+          "</span>" +
+          "</div>" +
+          '<div class="after"></div>';
+
+        contentNode.innerHTML = content;
+        placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+        placeOverlay.setMap(map);
       }
     </script>
   </body>

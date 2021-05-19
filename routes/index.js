@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 var request = require("request");
-var bodyParser=require('body-parser');
+var bodyParser = require("body-parser");
 
 var { OAuth2Client } = require("google-auth-library");
 var querystring = require("querystring");
@@ -10,11 +10,11 @@ var querystring = require("querystring");
 var CLIENT_ID =
   "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
 var client = new OAuth2Client(CLIENT_ID);
-var mysql=require('mysql')
+var mysql = require("mysql");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
-router.use(bodyParser.urlencoded({extended:false})); //url인코딩 x
-router.use(bodyParser.json());  //json방식으로 파
+router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
+router.use(bodyParser.json()); //json방식으로 파
 router.use(
   session({
     secret: "209", // 암호화
@@ -24,10 +24,10 @@ router.use(
   })
 );
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'g79465',
-  database : 'caferecommend'
+  host: "localhost",
+  user: "root",
+  password: "g79465",
+  database: "caferecommend",
 });
 connection.connect();
 /* GET home page. */
@@ -59,22 +59,20 @@ router.post("/index", (req, res) => {
 });
 
 router.get("/login", checkAuthenticated, (req, res) => {
-  var sql = 'SELECT * FROM USER WHERE EMAIL=?';
-  var parameter=[req.session.user.email];
-  connection.query(sql,parameter, function(err, row){
-    if(err){
+  var sql = "SELECT * FROM USER WHERE EMAIL=?";
+  var parameter = [req.session.user.email];
+  connection.query(sql, parameter, function (err, row) {
+    if (err) {
       console.log(err);
-    }
-    else {
+    } else {
       if (row.length > 0) {
-        console.log("이미 가입이 되어있는 아이디")
+        console.log("이미 가입이 되어있는 아이디");
         req.session.user.nickname = row[0].NICKNAME;
         req.session.user.age = row[0].AGE;
         req.session.user.gender = row[0].GENDER;
-        return res.render('map', {user : req.session.user})
-      }
-      else{
-        return res.render("login", { user: req.session.user, message:'none' });
+        return res.render("map", { user: req.session.user });
+      } else {
+        return res.render("login", { user: req.session.user, message: "none" });
       }
     }
   });
@@ -84,65 +82,42 @@ router.post("/login", (req, res) => {
   console.log(req.body.nickname);
   console.log(req.body.age);
   console.log(req.body.gender);
-  var sql =' SELECT * FROM USER WHERE NICKNAME=?';
-  var parameter=[req.body.nickname];
-  connection.query(sql, parameter, function(err,row){
-      if(err){
-        console.log(err);
-      }
-      if(row.length>0){
-        console.log('동일 닉네임있음');
-
-        return res.render("login", {user : req.session.user, message: 'same nickname'});
-      }
-      else{
-        req.session.user.nickname=req.body.nickname;
-        req.session.user.age=req.body.age;
-        req.session.user.gender=req.body.gender;
-        var sql='INSERT INTO USER(EMAIL, NAME, NICKNAME, AGE, GENDER) VALUES(?,?,?,?,?)';
-        var parameter=[req.session.user.email, req.session.user.name, req.session.user.nickname, req.session.user.age, req.session.user.gender];
-        connection.query(sql, parameter, function(err, row){
-          if(err){
-            console.log(err);
-          }
-          else{
-            console.log("새로운 user데이터 입력");
-          }
-        });
-        return res.render("map", { user : req.session.user });
-      }
-  });
-
-});
-
-router.get("/cafe", (req, res) => {
-  let code = "CE7";
-  let encodedStr = querystring.escape(code);
-
-  let kakaoOptions = {
-    uri: `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=${encodedStr}`,
-    method: "GET",
-    headers: {
-      Authorization: "KakaoAK 2f3999076db5d32db975ab9862a64480",
-    },
-    encoding: "utf-8",
-  };
-  request(kakaoOptions, callback);
-
-  function callback(error, res, body) {
-    console.log(body);
-    let kakaoPlaces = JSON.parse(body);
-
-    for (document of kakaoPlaces.documents) {
-      console.log(document.id);
-      console.log(document.place_name);
+  var sql = " SELECT * FROM USER WHERE NICKNAME=?";
+  var parameter = [req.body.nickname];
+  connection.query(sql, parameter, function (err, row) {
+    if (err) {
+      console.log(err);
     }
-  }
-  return;
-});
+    if (row.length > 0) {
+      console.log("동일 닉네임있음");
 
-router.get("/map", (req, res) => {
-  res.render("map");
+      return res.render("login", {
+        user: req.session.user,
+        message: "same nickname",
+      });
+    } else {
+      req.session.user.nickname = req.body.nickname;
+      req.session.user.age = req.body.age;
+      req.session.user.gender = req.body.gender;
+      var sql =
+        "INSERT INTO USER(EMAIL, NAME, NICKNAME, AGE, GENDER) VALUES(?,?,?,?,?)";
+      var parameter = [
+        req.session.user.email,
+        req.session.user.name,
+        req.session.user.nickname,
+        req.session.user.age,
+        req.session.user.gender,
+      ];
+      connection.query(sql, parameter, function (err, row) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("새로운 user데이터 입력");
+        }
+      });
+      return res.render("map", { user: req.session.user });
+    }
+  });
 });
 
 module.exports = router;
@@ -163,7 +138,7 @@ function checkAuthenticated(req, res, next) {
   verify()
     .then(() => {
       req.session.user.name = user.name;
-      req.session.user.email=user.email;
+      req.session.user.email = user.email;
       next();
     })
     .catch((err) => {
@@ -172,12 +147,13 @@ function checkAuthenticated(req, res, next) {
 }
 
 router.get("/map", (req, res) => {
-  console.log(req.session.user);
+  if (req.session.user) {
+    res.render("map");
+  }
   res.render("map");
 });
 
-
-router.get('/logout',function(req,res){
-  req.session.destroy();  //세션비우기
-  res.redirect('/');
+router.get("/logout", function (req, res) {
+  req.session.destroy(); //세션비우기
+  res.redirect("/");
 });
