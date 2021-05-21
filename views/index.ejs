@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content=<%=d%>>
+    <meta name="google-signin-client_id" content="94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= d%></title>
+    <title>first</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
@@ -19,7 +19,7 @@
 <script>
     function onSignIn(googleUser) {
         var id_token = googleUser.getAuthResponse().id_token;
-        //console.log(id_token);
+        console.log(id_token);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/index');
         xhr.setRequestHeader('Content-Type', 'application/json');

@@ -1,11 +1,11 @@
 var express = require("express");
 var router = express.Router();
 
-var request = require("request");
+//var request = require("request");
 var bodyParser = require("body-parser");
 
 var { OAuth2Client } = require("google-auth-library");
-var querystring = require("querystring");
+//var querystring = require("querystring");
 
 var CLIENT_ID =
   "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
@@ -21,8 +21,7 @@ router.use(
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
-  })
-);
+  }))
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -49,6 +48,8 @@ router.post("/index", (req, res) => {
       idToken: token,
       audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
     });
+    const payload = ticket.getPayload();
+    const userid = payload['sub']
   }
   verify()
     .then(() => {
@@ -59,6 +60,8 @@ router.post("/index", (req, res) => {
 });
 
 router.get("/login", checkAuthenticated, (req, res) => {
+  let user = req.user;
+  req.session.user=user;
   var sql = "SELECT * FROM USER WHERE EMAIL=?";
   var parameter = [req.session.user.email];
   connection.query(sql, parameter, function (err, row) {
@@ -124,7 +127,6 @@ module.exports = router;
 
 function checkAuthenticated(req, res, next) {
   let token = req.cookies["session-token"];
-
   let user = {};
   async function verify() {
     const ticket = await client.verifyIdToken({
@@ -137,8 +139,7 @@ function checkAuthenticated(req, res, next) {
   }
   verify()
     .then(() => {
-      req.session.user.name = user.name;
-      req.session.user.email = user.email;
+      req.user = user;
       next();
     })
     .catch((err) => {
