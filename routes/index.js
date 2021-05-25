@@ -1,11 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
-var request = require("request");
 var bodyParser = require("body-parser");
 
 var { OAuth2Client } = require("google-auth-library");
-var querystring = require("querystring");
 
 var CLIENT_ID =
   "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
@@ -13,15 +11,18 @@ var client = new OAuth2Client(CLIENT_ID);
 var mysql = require("mysql");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
+
 router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
-router.use(bodyParser.json()); //json방식으로 파
+router.use(bodyParser.json()); //json방식으로 파싱
 router.use(
   session({
     secret: "209", // 암호화
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
-  }))
+  })
+);
+
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -29,6 +30,7 @@ var connection = mysql.createConnection({
   database: "caferecommend",
 });
 connection.connect();
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -49,7 +51,7 @@ router.post("/index", (req, res) => {
       audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub']
+    const userid = payload["sub"];
   }
   verify()
     .then(() => {
@@ -61,7 +63,7 @@ router.post("/index", (req, res) => {
 
 router.get("/login", checkAuthenticated, (req, res) => {
   let user = req.user;
-  req.session.user=user;
+  req.session.user = user;
   var sql = "SELECT * FROM USER WHERE EMAIL=?";
   var parameter = [req.session.user.email];
   connection.query(sql, parameter, function (err, row) {
@@ -111,7 +113,7 @@ router.post("/login", (req, res) => {
         req.session.user.age,
         req.session.user.gender,
       ];
-      connection.query(sql, parameter, function (err, row) {
+      connection.query(sql, parameter, function (err) {
         if (err) {
           console.log(err);
         } else {
@@ -122,8 +124,6 @@ router.post("/login", (req, res) => {
     }
   });
 });
-
-module.exports = router;
 
 function checkAuthenticated(req, res, next) {
   let token = req.cookies["session-token"];
@@ -158,3 +158,34 @@ router.get("/logout", function (req, res) {
   req.session.destroy(); //세션비우기
   res.redirect("/");
 });
+
+// 카페 후기 등록
+router.post("/comment", function (req, res) {
+  var cafeId = req.body.cafeId;
+  var price = req.body.price;
+  var kindness = req.body.kindness;
+  var noise = req.body.noise;
+  var accessibility = req.body.accessibility;
+
+  // 입력받지 않은 데이터가 하나라도 존재 (카페아이디는 후기작성시 자동으로 받아옴)
+  if (!price || !kindness || !noise || !accessibility) {
+    console.log("입력받지 않은 데이터 존재");
+    return; // 후기작성으로 다시 이동
+  }
+
+  var sql =
+    "INSERT INTO COMMENT(CAFE_ID, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
+
+  var parameter = [cafeId, price, kindness, noise, accessibility];
+
+  connection.query(sql, parameter, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("새로운 comment 데이터 입력");
+    }
+  });
+  return res.render("map");
+});
+
+module.exports = router;
