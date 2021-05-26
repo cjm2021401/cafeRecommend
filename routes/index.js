@@ -9,19 +9,17 @@ var CLIENT_ID =
   "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
 var client = new OAuth2Client(CLIENT_ID);
 var mysql = require("mysql");
-var session = require("express-session");
-var FileStore = require("session-file-store")(session);
+const session = require("express-session");
+const FileStore = require("session-file-store")(session);
 
 router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
 router.use(bodyParser.json()); //json방식으로 파싱
-router.use(
-  session({
-    secret: "209", // 암호화
-    resave: false,
-    saveUninitialized: true,
-    store: new FileStore(),
-  })
-);
+router.use(session({
+  secret: '209',  // 암호화
+  resave: false,
+  saveUninitialized: true,
+  store: new FileStore()
+}))
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -62,8 +60,9 @@ router.post("/index", (req, res) => {
 });
 
 router.get("/login", checkAuthenticated, (req, res) => {
-  let user = req.user;
-  req.session.user = user;
+  req.session.user =req.user;
+  req.session.user.email = req.user.email;
+  req.session.user.name=req.user.name;
   var sql = "SELECT * FROM USER WHERE EMAIL=?";
   var parameter = [req.session.user.email];
   connection.query(sql, parameter, function (err, row) {

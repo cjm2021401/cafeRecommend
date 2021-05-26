@@ -43,28 +43,14 @@
       <a class="navbar-brand" href="/"
         ><img src="images/home.png" width="40" height="40" alt="" />
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <a class="navbar-brand" href="/"><strong>Home</strong></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active">
-            <a
-              class="nav-link"
-              style="color: #ffffff"
-              href="/"
-              onclick="signOut();"
-              >Logout<span class="sr-only">(current)</span></a
-            >
+            <a class="nav-link" style="color: #ffffff" href="/" onclick="signOut();">Logout<span class="sr-only">(current)</span></a>
           </li>
         </ul>
       </div>
@@ -78,54 +64,29 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-          <hr class="my-4" style="background-color: white" />
+          <hr class="my-4" style="background-color: white">
           <form method="post">
             <div class="form-group">
               <label for="id_input">닉네임을 입력하세요</label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                name="nickname"
-                aria-describedby="idHelp"
-                placeholder="ID"
-              />
-              <small id="idHelp" class="form-text text-muted"
-                >중복이 허용되지 않습니다.</small
-              >
+              <input type="text" class="form-control form-control-lg" name="nickname" aria-describedby="idHelp" placeholder="ID">
+              <small id="idHelp" class="form-text text-muted">중복이 허용되지 않습니다.</small>
             </div>
-            <hr class="my-3" style="background-color: white" />
+            <hr class="my-3" style="background-color: white" >
             <div class="form-group">
               <label for="age_input">나이를 입력하세요</label>
-              <input
-                class="form-control form-control-lg"
-                type="number"
-                name="age"
-                placeholder="Age"
-              />
+              <input class="form-control form-control-lg" type="number" name="age" placeholder="Age">
             </div>
-            <hr class="my-3" style="background-color: white" />
+            <hr class="my-3" style="background-color: white" >
 
             <label for="gender" class="form-label">성별을 입력하세요</label>
-            <select
-              class="form-select form-select-lg"
-              id="gender"
-              name="gender"
-              required
-            >
+            <select class="form-select form-select-lg" id="gender" name="gender" required>
               <option selected disabled value="">Choose...</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
 
             <hr class="my-4" style="background-color: white" />
-            <button
-              type="submit"
-              style="float: right"
-              class="btn btn-primary btn-lg"
-              id="please"
-            >
-              Submit
-            </button>
+            <button type="submit" style="float: right" class="btn btn-primary btn-lg" id="please">Submit</button>
           </form>
         </div>
         <div class="col-2"></div>
@@ -143,12 +104,6 @@
     <%}%>
   </body>
   <script>
-    function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log("User signed out.");
-      });
-    }
     function signOut() {
       var auth2 = gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
