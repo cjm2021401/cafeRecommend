@@ -12,6 +12,18 @@
 </code>
 </pre>
 
+> <pre><code>
+>CREATE TABLE COMMENT(
+>ID int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+>CAFE_ID int(10) NOT NULL
+>PRICE int(10) NOT NULL,
+>KINDNESS int(10) NOT NULL,
+>NOISE int(10) NOT NULL,
+>ACCESSIBILITY int(10) NOT NULL
+>);
+</code>
+</pre>
+
 ###commit 형식
 <pre><code>
 ##### 제목 - 50자 이내로 요약!
