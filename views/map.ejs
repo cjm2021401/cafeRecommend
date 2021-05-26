@@ -260,8 +260,8 @@
           '    <span class="tel">' +
           place.phone +
           "</span>" +
-          "</div>" +
-          '<div class="after"></div>';
+          '<a href="/comment"><button>후기 작성</button>';
+        "</div>" + '<div class="after"></div>';
         contentNode.innerHTML = content;
         placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
         placeOverlay.setMap(map);

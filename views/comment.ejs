@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Enroll Comment</title>
+
+    <link rel="stylesheet" href="stylesheets/bootstrap.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        img{
+            max-width: 100%;
+            height: 100% !important;
+        }
+        h1{font-family: 'Noto Sans KR', sans-serif;}
+        h4{font-family: 'Noto Sans KR', sans-serif;}
+        h2{font-family: 'Noto Sans KR', sans-serif;}
+        h3{font-family: 'Noto Sans KR', sans-serif;}
+        h5{font-family: 'Noto Sans KR', sans-serif;}
+        .middle{
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<hr class="my-2" >
+<section id="carousel-1">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <hr class="my-4" style="background-color: white">
+            <form method="post">
+                <div class></div>
+                <hr class="my-3" style="background-color: white">
+                <label for="price" class="form-label">가격</label>
+                <select class="form-select form-select-lg" id="price"  name="price" required>
+                    <option selected disabled value="">선택하세요</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+
+                <hr class="my-3" style="background-color: white">
+                <label for="kindness" class="form-label">친절도</label>
+                <select class="form-select form-select-lg" id="kindness"  name="kindness" required>
+                    <option selected disabled value="">선택하세요</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+
+                <hr class="my-3" style="background-color: white">
+                <label for="noise" class="form-label">소음</label>
+                <select class="form-select form-select-lg" id="noise"  name="noise" required>
+                    <option selected disabled value="">선택하세요</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+
+                <hr class="my-3" style="background-color: white">
+                <label for="accessibility" class="form-label">접근성</label>
+                <select class="form-select form-select-lg" id="accessibility"  name="accessibility" required>
+                    <option selected disabled value="">선택하세요</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+
+                <hr class="my-4" style="background-color: white">
+                <button type="submit" style="float:right" class="btn btn-primary btn-lg" id="please">Submit</button>
+            </form>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</section>
+</body>
+<script src="javascripts/bootstrap.js"></script>
+</html>

@@ -159,18 +159,27 @@ router.get("/logout", function (req, res) {
   res.redirect("/");
 });
 
+router.get("/comment", function (req, res) {
+  res.render("comment");
+});
+
 // 카페 후기 등록
 router.post("/comment", function (req, res) {
-  var cafeId = req.body.cafeId;
+  var cafeId = req.query.cafeId;
   var price = req.body.price;
   var kindness = req.body.kindness;
   var noise = req.body.noise;
   var accessibility = req.body.accessibility;
 
+  console.log(price);
+  console.log(kindness);
+  console.log(noise);
+  console.log(accessibility);
+
   // 입력받지 않은 데이터가 하나라도 존재 (카페아이디는 후기작성시 자동으로 받아옴)
-  if (!price || !kindness || !noise || !accessibility) {
+  if (!cafeId || !price || !kindness || !noise || !accessibility) {
     console.log("입력받지 않은 데이터 존재");
-    return; // 후기작성으로 다시 이동
+    res.redirect("/comment"); // 후기작성으로 다시 이동
   }
 
   var sql =
