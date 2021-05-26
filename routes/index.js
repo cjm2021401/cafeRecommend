@@ -148,7 +148,7 @@ function checkAuthenticated(req, res, next) {
 
 router.get("/map", (req, res) => {
   if (req.session.user) {
-    res.render("map");
+    res.render("map", {user:req.session.user});
   }
   res.render("map");
 });

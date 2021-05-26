@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="stylesheets/bootstrap.css" />
+    <link rel="stylesheet" href="stylesheets/bootstrap.css">
     <title>Cafe Map</title>
     <style>
       .navbar {
@@ -116,6 +116,9 @@
         <a class="navbar-brand" href="/"><strong>Home</strong></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active">
+            <a class="nav-link" style="color:#ffffff" href="#" data-toggle="modal" data-target="#profile"><%=user.nickname%>'s Profile<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
             <a
               class="nav-link"
               style="color: #ffffff"
@@ -130,8 +133,18 @@
     <div class="pricing-header px-3 py-1 pt-md-3 pb-md-1 mx-auto text-center">
       <h3 class="display-6 font-weight-bold">Map</h3>
     </div>
+    <section id="carousel-3" class="text-center">
+      <div class="row">
+        <div class="col-1"></div>
 
-    <div id="map" style="width: 100%; height: 575px"></div>
+        <div class="col-10"><div id="map" style="width: 100%; height: 575px"></div></div>
+
+
+        <div class="col-1"></div>
+      </div>
+    </section>
+
+
     <script
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee&libraries=services"
@@ -270,5 +283,26 @@
     </script>
     <script src="javascripts/bootstrap.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+    <!-- 모달 바디 -->
+    <div class="modal fade" id="profile" tabindex="-1" role="dialog" aria-labelledby="profilemodal" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="profilemodal"><%=user.nickname%>'s PROFILE</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+           <p>모달바</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
