@@ -159,13 +159,14 @@ router.get("/logout", function (req, res) {
   res.redirect("/");
 });
 
-router.get("/comment", function (req, res) {
-  res.render("comment");
+router.get("/comment/:cafeId", function (req, res) {
+  const cafeId = req.params.cafeId;
+  res.render("comment", { cafeId: cafeId });
 });
 
 // 카페 후기 등록
 router.post("/comment", function (req, res) {
-  var cafeId = req.query.cafeId;
+  var cafeId = req.body.cafeId;
   var price = req.body.price;
   var kindness = req.body.kindness;
   var noise = req.body.noise;
@@ -179,7 +180,7 @@ router.post("/comment", function (req, res) {
   // 입력받지 않은 데이터가 하나라도 존재 (카페아이디는 후기작성시 자동으로 받아옴)
   if (!cafeId || !price || !kindness || !noise || !accessibility) {
     console.log("입력받지 않은 데이터 존재");
-    res.redirect("/comment"); // 후기작성으로 다시 이동
+    res.redirect("/comment/:cafeId"); // 후기작성으로 다시 이동
   }
 
   var sql =

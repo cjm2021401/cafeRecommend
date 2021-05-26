@@ -227,6 +227,7 @@
         return marker;
       }
       function displayPlaceInfo(place) {
+        console.log(place);
         var content =
           '<div class="placeinfo">' +
           '   <a class="title" href="' +
@@ -260,7 +261,7 @@
           '    <span class="tel">' +
           place.phone +
           "</span>" +
-          '<a href="/comment"><button>후기 작성</button>';
+          `<a href="/comment/${place.id}"><button>후기 작성</button>`;
         "</div>" + '<div class="after"></div>';
         contentNode.innerHTML = content;
         placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
