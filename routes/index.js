@@ -86,21 +86,38 @@ router.get("/login", checkAuthenticated, (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  console.log("구글로그인 성공");
+  //입력을 다하였는지
+  if(!req.body.nickname || !req.body.age || !req.body.gender || !req.body.price || !req.body.kindness || !req.body.accessibility ){
+    console.log("입력받지 않은 데이터 존재");
+    return res.render("login", {
+      user: req.session.user,
+      message: "need data",
+    });
+  }
+  var set = new Set([req.body.price, req.body.accessibility, req.body.kindness, req.body.noise]);
+  //db에 동일 닉네임있는지 검사(닉네임은 유일해야함)
   var sql = " SELECT * FROM USER WHERE NICKNAME=?";
   var parameter = [req.body.nickname];
   connection.query(sql, parameter, function (err, row) {
     if (err) {
       console.log(err);
     }
-    if (row.length > 0) {
+    else if (row.length > 0) {
       console.log("동일 닉네임있음");
-
       return res.render("login", {
         user: req.session.user,
         message: "same nickname",
       });
-    } else {
+    }
+    //중복순위제
+    else if (set.size!=4){
+      console.log("중복된 순위 존재");
+      return res.render("login", {
+        user: req.session.user,
+        message: "wrong preference",
+      });
+    }
+    else {
       req.session.user.nickname = req.body.nickname;
       req.session.user.age = req.body.age;
       req.session.user.gender = req.body.gender;
@@ -109,24 +126,40 @@ router.post("/login", (req, res) => {
       req.session.user.noise=req.body.noise;
       req.session.user.accessibility=req.body.accessibility;
       var sql =
-        "INSERT INTO USER(EMAIL,NICKNAME, AGE, GENDER, PICTURE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?,?,?,?)";
+        "INSERT INTO USER(EMAIL,NICKNAME, AGE, GENDER) VALUES(?,?,?,?)";
       var parameter = [
         req.session.user.email,
         req.session.user.nickname,
         req.session.user.age,
         req.session.user.gender,
+      ];
+      connection.query(sql, parameter, function (err) {
+        if (err) {
+          console.log(err);
+          return res.render("/");
+        } else {
+          console.log("새로운 user데이터 입력");
+        }
+      });
+      var sql2 =
+          "INSERT INTO PREFERENCE(NICKNAME, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
+      var parameter2 = [
+        req.session.user.nickname,
         req.session.user.price,
         req.session.user.kindness,
         req.session.user.noise,
         req.session.user.accessibility
       ];
-      connection.query(sql, parameter, function (err) {
+      connection.query(sql2, parameter2, function (err) {
         if (err) {
           console.log(err);
+          return res.render("/");
         } else {
-          console.log("새로운 user데이터 입력");
+          console.log("새로운 PREFERENCE데이터 입력");
+
         }
       });
+
       return res.render("map", { user: req.session.user });
     }
   });
@@ -158,6 +191,15 @@ router.get("/logout", function (req, res) {
   req.session.destroy(); //세션비우기
   res.redirect("/");
 });
+
+router.get("/map", function(req, res, next){
+  if (req.session.user) {
+    res.render("map", {user: req.session.user});
+  }
+  else{
+    res.render("/")
+  }
+})
 
 router.get("/review/:cafeId", function (req, res) {
   const cafeId = req.params.cafeId;
@@ -199,5 +241,6 @@ router.post("/review", function (req, res) {
     '<script>alert("등록 완료"); location.href = "/login";</script>'
   );
 });
+
 
 module.exports = router;
