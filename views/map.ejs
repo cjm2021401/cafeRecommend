@@ -209,6 +209,9 @@
         ps.categorySearch(currCategory, placesSearchCB, { usemapBounds: true });
       }
       function placesSearchCB(data, status, pagination) {
+        if (pagination.hasNextPage) {
+          pagination.nextPage();
+        }
         if (status === kakao.maps.services.Status.OK) {
           displayPlaces(data);
         }
