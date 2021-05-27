@@ -63,6 +63,7 @@ router.get("/login", checkAuthenticated, (req, res) => {
   req.session.user =req.user;
   req.session.user.email = req.user.email;
   req.session.user.name=req.user.name;
+  req.session.user.picture=req.user.picture;
   var sql = "SELECT * FROM USER WHERE EMAIL=?";
   var parameter = [req.session.user.email];
   connection.query(sql, parameter, function (err, row) {
@@ -83,9 +84,7 @@ router.get("/login", checkAuthenticated, (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  console.log(req.body.nickname);
-  console.log(req.body.age);
-  console.log(req.body.gender);
+  console.log("구글로그인 성공");
   var sql = " SELECT * FROM USER WHERE NICKNAME=?";
   var parameter = [req.body.nickname];
   connection.query(sql, parameter, function (err, row) {
@@ -135,6 +134,7 @@ function checkAuthenticated(req, res, next) {
     const payload = ticket.getPayload();
     user.name = payload.name;
     user.email = payload.email;
+    user.picture = payload.picture;
   }
   verify()
     .then(() => {
