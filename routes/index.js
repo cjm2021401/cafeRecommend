@@ -104,14 +104,21 @@ router.post("/login", (req, res) => {
       req.session.user.nickname = req.body.nickname;
       req.session.user.age = req.body.age;
       req.session.user.gender = req.body.gender;
+      req.session.user.price=req.body.price;
+      req.session.user.kindness=req.body.kindness;
+      req.session.user.noise=req.body.noise;
+      req.session.user.accessibility=req.body.accessibility;
       var sql =
-        "INSERT INTO USER(EMAIL, NAME, NICKNAME, AGE, GENDER) VALUES(?,?,?,?,?)";
+        "INSERT INTO USER(EMAIL,NICKNAME, AGE, GENDER, PICTURE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?,?,?,?)";
       var parameter = [
         req.session.user.email,
-        req.session.user.name,
         req.session.user.nickname,
         req.session.user.age,
         req.session.user.gender,
+        req.session.user.price,
+        req.session.user.kindness,
+        req.session.user.noise,
+        req.session.user.accessibility
       ];
       connection.query(sql, parameter, function (err) {
         if (err) {
@@ -134,7 +141,6 @@ function checkAuthenticated(req, res, next) {
       audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
     });
     const payload = ticket.getPayload();
-    user.name = payload.name;
     user.email = payload.email;
     user.picture = payload.picture;
   }

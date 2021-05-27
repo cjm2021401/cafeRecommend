@@ -64,7 +64,7 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-          <hr class="my-4" style="background-color: white">
+          <hr class="my-2" style="background-color: white">
           <form method="post">
             <div class="form-group">
               <label for="id_input">닉네임을 입력하세요</label>
@@ -84,8 +84,93 @@
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
+            <hr class="my-3" style="background-color: white">
+            <hr class="my-2" />
+            <hr class="my-2" style="background-color: white">
+            <div class="pricing-header px-3 py-1 pt-md-3 pb-md-1 mx-auto text-center">
+              <h5 class="display- ">PREFERENCE</h5>
+              <p>카페를 선택할 떄 중요하게 여기는 요소들의 순위를 매겨주세요.</p>
+              <p>(순위가 중복되면 안됩니다. ex) 가격 1순위, 친절 1순위(X)</p>
+            </div>
+            <div class="text-center">
+            <label for="price_form" class="form-label font-weight-bold" style="margin-right: 15px">가격</label>
+           <div class="form-check form-check-inline" id="price_form">
+              <input class="form-check-input" type="radio" name="price" id="price1" value="1">
+              <label class="form-check-label" for="price1">1순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="price" id="price2" value="2">
+              <label class="form-check-label" for="price2">2순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="price" id="price3" value="3" >
+              <label class="form-check-label" for="price3">3순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="price" id="price4" value="4" >
+              <label class="form-check-label" for="price4">4순위</label>
+            </div>
+            <hr class="my-1" style="background-color: white" />
 
-            <hr class="my-4" style="background-color: white" />
+            <label for="kindness_form" class="form-label font-weight-bold" style="margin-right: 5px">친절도</label>
+            <div class="form-check form-check-inline" id="kindness_form">
+              <input class="form-check-input" type="radio" name="kindness" id="kindness1" value="1">
+              <label class="form-check-label" for="kindness">1순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="kindness" id="kindness2" value="2">
+              <label class="form-check-label" for="kindness2">2순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="kindness" id="kindness3" value="3" >
+              <label class="form-check-label" for="kindness3">3순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="kindness" id="kindness4" value="4" >
+              <label class="form-check-label" for="kindness4">4순위</label>
+            </div>
+
+            <hr class="my-1" style="background-color: white" />
+
+            <label for="noise_form" class="form-label font-weight-bold" style="margin-right: 15px">소</label>
+            <div class="form-check form-check-inline" id="noise_form">
+              <input class="form-check-input" type="radio" name="noise" id="noise1" value="1">
+              <label class="form-check-label" for="noise">1순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="noise" id="noise2" value="2">
+              <label class="form-check-label" for="kindness2">2순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="noise" id="noise3" value="3" >
+              <label class="form-check-label" for="noise3">3순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="noise" id="noise4" value="4" >
+              <label class="form-check-label" for="noise4">4순위</label>
+            </div>
+
+            <hr class="my-1" style="background-color: white" />
+
+            <label for="accessibility_form" class="form-label font-weight-bold" style="margin-right: 5px">접근성</label>
+            <div class="form-check form-check-inline" id="accessibility_form">
+              <input class="form-check-input" type="radio" name="accessibility" id="accessibility1" value="1">
+              <label class="form-check-label" for="accessibility">1순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="accessibility" id="accessibility2" value="2">
+              <label class="form-check-label" for="accessibility2">2순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="accessibility" id="accessibility3" value="3" >
+              <label class="form-check-label" for="accessibility3">3순위</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="accessibility" id="accessibility4" value="4" >
+              <label class="form-check-label" for="accessibility4">4순위</label>
+            </div>
+            </div>
+            <hr class="my-3" style="background-color: white" />
             <button type="submit" style="float: right" class="btn btn-primary btn-lg" id="please">Submit</button>
           </form>
         </div>
