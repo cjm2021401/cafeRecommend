@@ -14,12 +14,14 @@ const FileStore = require("session-file-store")(session);
 
 router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
 router.use(bodyParser.json()); //json방식으로 파싱
-router.use(session({
-  secret: '209',  // 암호화
-  resave: false,
-  saveUninitialized: true,
-  store: new FileStore()
-}))
+router.use(
+  session({
+    secret: "209", // 암호화
+    resave: false,
+    saveUninitialized: true,
+    store: new FileStore(),
+  })
+);
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -60,10 +62,10 @@ router.post("/index", (req, res) => {
 });
 
 router.get("/login", checkAuthenticated, (req, res) => {
-  req.session.user =req.user;
+  req.session.user = req.user;
   req.session.user.email = req.user.email;
-  req.session.user.name=req.user.name;
-  req.session.user.picture=req.user.picture;
+  req.session.user.name = req.user.name;
+  req.session.user.picture = req.user.picture;
   var sql = "SELECT * FROM USER WHERE EMAIL=?";
   var parameter = [req.session.user.email];
   connection.query(sql, parameter, function (err, row) {
@@ -146,25 +148,18 @@ function checkAuthenticated(req, res, next) {
     });
 }
 
-router.get("/map", (req, res) => {
-  if (req.session.user) {
-    res.render("map", {user:req.session.user});
-  }
-  res.render("map");
-});
-
 router.get("/logout", function (req, res) {
   req.session.destroy(); //세션비우기
   res.redirect("/");
 });
 
-router.get("/comment/:cafeId", function (req, res) {
+router.get("/review/:cafeId", function (req, res) {
   const cafeId = req.params.cafeId;
-  res.render("comment", { cafeId: cafeId });
+  res.render("review", { cafeId: cafeId });
 });
 
 // 카페 후기 등록
-router.post("/comment", function (req, res) {
+router.post("/review", function (req, res) {
   var cafeId = req.body.cafeId;
   var price = req.body.price;
   var kindness = req.body.kindness;
@@ -179,11 +174,11 @@ router.post("/comment", function (req, res) {
   // 입력받지 않은 데이터가 하나라도 존재 (카페아이디는 후기작성시 자동으로 받아옴)
   if (!cafeId || !price || !kindness || !noise || !accessibility) {
     console.log("입력받지 않은 데이터 존재");
-    res.redirect("/comment/:cafeId"); // 후기작성으로 다시 이동
+    res.redirect("/review/:cafeId"); // 후기작성으로 다시 이동
   }
 
   var sql =
-    "INSERT INTO COMMENT(CAFE_ID, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
+    "INSERT INTO REVIEW(CAFE_ID, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
 
   var parameter = [cafeId, price, kindness, noise, accessibility];
 
@@ -194,7 +189,9 @@ router.post("/comment", function (req, res) {
       console.log("새로운 comment 데이터 입력");
     }
   });
-  return res.render("map");
+  return res.send(
+    '<script>alert("등록 완료"); location.href = "/login";</script>'
+  );
 });
 
 module.exports = router;

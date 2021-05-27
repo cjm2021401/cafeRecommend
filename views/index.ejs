@@ -78,7 +78,7 @@
             console.log('Signed in as: ' + xhr.responseText);
             if(xhr.responseText == 'success'){
                 signOut();
-                location.assign('/login')
+                location.assign('/login');
             }
         };
         xhr.send(JSON.stringify({token : id_token}));

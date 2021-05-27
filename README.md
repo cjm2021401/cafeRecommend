@@ -1,5 +1,7 @@
 ###초기설정
->####데이터 베이스 설정
+
+> ####데이터 베이스 설정
+>
 > <pre><code>
 > CREATE TABLE USER(
 > ID int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -10,22 +12,25 @@
 > GENDER varchar(32),
 > PICTURE varchar(128) NOT NULL
 > );
-</code>
+> </code>
+
 </pre>
 
 > <pre><code>
-> CREATE TABLE COMMENT(
+> CREATE TABLE REVIEW(
 > ID int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-> CAFE_ID int(10) NOT NULL
+> CAFE_ID int(10) NOT NULL,
 > PRICE int(10) NOT NULL,
 > KINDNESS int(10) NOT NULL,
 > NOISE int(10) NOT NULL,
 > ACCESSIBILITY int(10) NOT NULL
 > );
-</code>
+> </code>
+
 </pre>
 
 ###commit 형식
+
 <pre><code>
 ##### 제목 - 50자 이내로 요약!
 
@@ -52,5 +57,3 @@
 #     제목 첫 글자는 대문자로 작성했나요?
 </code>
 </pre>
-
-
