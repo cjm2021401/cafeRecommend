@@ -242,5 +242,30 @@ router.post("/review", function (req, res) {
   );
 });
 
+router.get("/recommend", function(req, res){
+    var sql = "SELECT CAFE_ID FROM REVIEW WHERE PRICE >= ? AND KINDNESS >= ? AND NOISE >= ? AND ACCESSIBILITY >= ?";
+    var parameter=[5-req.session.user.price, 5-req.session.user.kindness, 5-req.session.user.noise, 5-req.session.user.accessibility];
+
+    connection.query(sql, parameter, function (err, row) {
+      if(err){
+        console.log(err);
+      }else if (row.length > 0) { //만족하는 조건이 한개도없을때
+        var parameter2=[4-req.session.user.price, 4-req.session.user.kindness, 4-req.session.user.noise, 4-req.session.user.accessibility];
+
+        connection.query(sql, parameter2, function (err, row) {
+          if(err){
+            console.log(err);
+          }else{
+            console.log(row);
+            res.render("map", {user: req.session.user});
+          }
+        });
+
+      }else{
+        console.log(row);
+        res.render("map", {user: req.session.user});
+      }
+    });
+});
 
 module.exports = router;
