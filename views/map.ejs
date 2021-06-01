@@ -158,12 +158,30 @@
 
         <div class="col-1"></div>
       </div>
+      <button type="button" id='Recommend' class="btn btn-primary"  onclick="recommend();">추천</button>
+      <p id='test'></p>
     </section>
 
     <script
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee&libraries=services"
     ></script>
+    <script>
+      function recommend(){
+
+        $.ajax({
+          url: '/recommend',
+          type: 'GET',
+          success:function (result){
+            if (result) {
+              $('#test').html(result.result[0].CAFE_ID);
+            }
+          }
+        });
+
+      }
+    </script>
+
     <script>
       var lat = "";
       var lon = "";

@@ -277,8 +277,8 @@ router.get("/recommend", function (req, res) {
         if (err) {
           console.log(err);
         } else if (row.length > 0) {
-          console.log(row);
-          res.send(row);
+          console.log(row[0].CAFE_ID);
+          res.send({result:row});
         }
       });
     }
