@@ -278,7 +278,7 @@ router.get("/recommend", function (req, res) {
           console.log(err);
         } else if (row.length > 0) {
           console.log(row);
-          res.render("map", { user: req.session.user, row: row });
+          res.send(row);
         }
       });
     }
