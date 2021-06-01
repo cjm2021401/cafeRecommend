@@ -87,22 +87,33 @@ router.get("/login", checkAuthenticated, (req, res) => {
 
 router.post("/login", (req, res) => {
   //입력을 다하였는지
-  if(!req.body.nickname || !req.body.age || !req.body.gender || !req.body.price || !req.body.kindness || !req.body.accessibility ){
+  if (
+    !req.body.nickname ||
+    !req.body.age ||
+    !req.body.gender ||
+    !req.body.price ||
+    !req.body.kindness ||
+    !req.body.accessibility
+  ) {
     console.log("입력받지 않은 데이터 존재");
     return res.render("login", {
       user: req.session.user,
       message: "need data",
     });
   }
-  var set = new Set([req.body.price, req.body.accessibility, req.body.kindness, req.body.noise]);
+  var set = new Set([
+    req.body.price,
+    req.body.accessibility,
+    req.body.kindness,
+    req.body.noise,
+  ]);
   //db에 동일 닉네임있는지 검사(닉네임은 유일해야함)
   var sql = " SELECT * FROM USER WHERE NICKNAME=?";
   var parameter = [req.body.nickname];
   connection.query(sql, parameter, function (err, row) {
     if (err) {
       console.log(err);
-    }
-    else if (row.length > 0) {
+    } else if (row.length > 0) {
       console.log("동일 닉네임있음");
       return res.render("login", {
         user: req.session.user,
@@ -110,23 +121,21 @@ router.post("/login", (req, res) => {
       });
     }
     //중복순위제
-    else if (set.size!=4){
+    else if (set.size != 4) {
       console.log("중복된 순위 존재");
       return res.render("login", {
         user: req.session.user,
         message: "wrong preference",
       });
-    }
-    else {
+    } else {
       req.session.user.nickname = req.body.nickname;
       req.session.user.age = req.body.age;
       req.session.user.gender = req.body.gender;
-      req.session.user.price=req.body.price;
-      req.session.user.kindness=req.body.kindness;
-      req.session.user.noise=req.body.noise;
-      req.session.user.accessibility=req.body.accessibility;
-      var sql =
-        "INSERT INTO USER(EMAIL,NICKNAME, AGE, GENDER) VALUES(?,?,?,?)";
+      req.session.user.price = req.body.price;
+      req.session.user.kindness = req.body.kindness;
+      req.session.user.noise = req.body.noise;
+      req.session.user.accessibility = req.body.accessibility;
+      var sql = "INSERT INTO USER(EMAIL,NICKNAME, AGE, GENDER) VALUES(?,?,?,?)";
       var parameter = [
         req.session.user.email,
         req.session.user.nickname,
@@ -142,13 +151,13 @@ router.post("/login", (req, res) => {
         }
       });
       var sql2 =
-          "INSERT INTO PREFERENCE(NICKNAME, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
+        "INSERT INTO PREFERENCE(NICKNAME, PRICE, KINDNESS, NOISE, ACCESSIBILITY) VALUES(?,?,?,?,?)";
       var parameter2 = [
         req.session.user.nickname,
         req.session.user.price,
         req.session.user.kindness,
         req.session.user.noise,
-        req.session.user.accessibility
+        req.session.user.accessibility,
       ];
       connection.query(sql2, parameter2, function (err) {
         if (err) {
@@ -156,7 +165,6 @@ router.post("/login", (req, res) => {
           return res.render("/");
         } else {
           console.log("새로운 PREFERENCE데이터 입력");
-
         }
       });
 
@@ -192,14 +200,13 @@ router.get("/logout", function (req, res) {
   res.redirect("/");
 });
 
-router.get("/map", function(req, res, next){
+router.get("/map", function (req, res, next) {
   if (req.session.user) {
-    res.render("map", {user: req.session.user});
+    res.render("map", { user: req.session.user });
+  } else {
+    res.render("/");
   }
-  else{
-    res.render("/")
-  }
-})
+});
 
 router.get("/review/:cafeId", function (req, res) {
   const cafeId = req.params.cafeId;
@@ -242,30 +249,40 @@ router.post("/review", function (req, res) {
   );
 });
 
-router.get("/recommend", function(req, res){
-    var sql = "SELECT CAFE_ID FROM REVIEW WHERE PRICE >= ? AND KINDNESS >= ? AND NOISE >= ? AND ACCESSIBILITY >= ?";
-    var parameter=[5-req.session.user.price, 5-req.session.user.kindness, 5-req.session.user.noise, 5-req.session.user.accessibility];
+router.get("/recommend", function (req, res) {
+  console.log(req.session.user);
 
-    connection.query(sql, parameter, function (err, row) {
-      if(err){
-        console.log(err);
-      }else if (row.length > 0) { //만족하는 조건이 한개도없을때
-        var parameter2=[4-req.session.user.price, 4-req.session.user.kindness, 4-req.session.user.noise, 4-req.session.user.accessibility];
+  var sql =
+    "SELECT PRICE, KINDNESS, NOISE, ACCESSIBILITY FROM PREFERENCE WHERE NICKNAME = ?";
 
-        connection.query(sql, parameter2, function (err, row) {
-          if(err){
-            console.log(err);
-          }else{
-            console.log(row);
-            res.render("map", {user: req.session.user});
-          }
-        });
+  var parameter = req.session.user.nickname;
 
-      }else{
-        console.log(row);
-        res.render("map", {user: req.session.user});
-      }
-    });
+  connection.query(sql, parameter, function (err, row) {
+    if (err) {
+      console.log(err);
+    } else if (row.length > 0) {
+      console.log(row[0]);
+
+      const price = 5 - row[0].PRICE;
+      const kindness = 5 - row[0].KINDNESS;
+      const noise = 5 - row[0].NOISE;
+      const accessibility = 5 - row[0].ACCESSIBILITY;
+
+      var sql =
+        "SELECT CAFE_ID FROM REVIEW GROUP BY CAFE_ID HAVING AVG(PRICE) >= ? AND AVG(KINDNESS) >= ? AND AVG(NOISE) >= ? AND AVG(ACCESSIBILITY) >= ?";
+
+      var parameter = [price, kindness, noise, accessibility];
+
+      connection.query(sql, parameter, function (err, row) {
+        if (err) {
+          console.log(err);
+        } else if (row.length > 0) {
+          console.log(row);
+          res.render("map", { user: req.session.user, row: row });
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;
