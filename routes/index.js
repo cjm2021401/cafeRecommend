@@ -195,12 +195,15 @@ function checkAuthenticated(req, res, next) {
     });
 }
 
+// 로그아웃
 router.get("/logout", function (req, res) {
   req.session.destroy(); //세션비우기
   res.redirect("/");
 });
 
+// 로그인 후 지도 화면
 router.get("/map", function (req, res, next) {
+  // 로그인된 사용자 존재
   if (req.session.user) {
     res.render("map", { user: req.session.user });
   } else {
@@ -208,6 +211,7 @@ router.get("/map", function (req, res, next) {
   }
 });
 
+// 카페 후기 입력 창
 router.get("/review/:cafeId", function (req, res) {
   const cafeId = req.params.cafeId;
   res.render("review", { cafeId: cafeId });
@@ -249,6 +253,7 @@ router.post("/review", function (req, res) {
   );
 });
 
+// 추천 API
 router.get("/recommend", function (req, res) {
   console.log(req.session.user);
 
@@ -277,8 +282,8 @@ router.get("/recommend", function (req, res) {
         if (err) {
           console.log(err);
         } else if (row.length > 0) {
-          console.log(row[0].CAFE_ID);
-          res.send({result:row});
+          console.log(row);
+          res.send({ row: row });
         }
       });
     }

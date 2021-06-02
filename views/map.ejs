@@ -158,8 +158,15 @@
 
         <div class="col-1"></div>
       </div>
-      <button type="button" id='Recommend' class="btn btn-primary"  onclick="recommend();">추천</button>
-      <p id='test'></p>
+      <button
+        type="button"
+        id="Recommend"
+        class="btn btn-primary"
+        onclick="recommend();"
+      >
+        추천
+      </button>
+      <p id="recommend"></p>
     </section>
 
     <script
@@ -167,29 +174,47 @@
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=68cbccbcd6f0fef0a213e62ad37393ee&libraries=services"
     ></script>
     <script>
-      function recommend(){
-
-        $.ajax({
-          url: '/recommend',
-          type: 'GET',
-          success:function (result){
-            if (result) {
-              $('#test').html(result.result[0].CAFE_ID);
-            }
-          }
-        });
-
-      }
-    </script>
-
-    <script>
       var lat = "";
       var lon = "";
       var placeOverlay = new kakao.maps.CustomOverlay({ zIndex: 1 });
       var contentNode = document.createElement("div");
+      var recommendID = [];
+      var recommendList = [];
       var markers = [];
       var currCategory = "CE7"; // 카테고리코드: 카페
       var order = 1;
+      var click = false;
+
+      // 추천기능 (ajax 통신)
+      function recommend() {
+        $.ajax({
+          url: "/recommend",
+          type: "GET",
+          success: function (result) {
+            // 추천 기능 활성화
+            if (!click) {
+              if (result) {
+                for (var i = 0; i < result.row.length; i++) {
+                  recommendID.push(result.row[i].CAFE_ID);
+                }
+                console.log(recommendID);
+                click = true;
+                removeMarker();
+                searchPlaces();
+              }
+            } // 추천 기능 비활성화
+            else {
+              recommendID = [];
+              recommendList = [];
+              click = false;
+              removeMarker();
+              searchPlaces();
+            }
+          },
+        });
+      }
+
+      // 지도 기본설정
       var mapContainer = document.getElementById("map"),
         mapOption = {
           center: new kakao.maps.LatLng(36.2477502, 127.078164),
@@ -202,6 +227,7 @@
       addEventHandle(contentNode, "mousedown", kakao.maps.event.preventMap);
       addEventHandle(contentNode, "touchstart", kakao.maps.event.preventMap);
       placeOverlay.setContent(contentNode);
+
       function addEventHandle(target, type, callback) {
         if (target.addEventListener) {
           target.addEventListener(type, callback);
@@ -210,6 +236,8 @@
         }
       }
       placeOverlay.setContent(contentNode);
+
+      // navigator 활성화 시 (현재 위치 이동)
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           lat = position.coords.latitude;
@@ -221,10 +249,13 @@
         var locPosition = new kakao.maps.LatLng(36.2477502, 127.078164);
         displayCurrentPosition(locPosition);
       }
+
+      // 현재 사용자 기준 위치로 이동
       function displayCurrentPosition(locPosition) {
         map.setCenter(locPosition);
       }
       kakao.maps.event.addListener(map, "idle", searchPlaces);
+
       function searchPlaces() {
         if (!currCategory) {
           return;
@@ -232,14 +263,32 @@
         placeOverlay.setMap(null);
         ps.categorySearch(currCategory, placesSearchCB, { usemapBounds: true });
       }
+
       function placesSearchCB(data, status, pagination) {
         if (pagination.hasNextPage) {
           pagination.nextPage();
         }
         if (status === kakao.maps.services.Status.OK) {
-          displayPlaces(data);
+          // 추천 기능 활성화
+          if (recommendID.length > 0) {
+            console.log(recommendID);
+            for (var i = 0; i < recommendID.length; i++) {
+              for (var j = 0; j < data.length; j++) {
+                if (recommendID[i] == data[j].id) {
+                  recommendList.push(data[j]);
+                  break;
+                }
+              }
+            }
+            displayPlaces(recommendList);
+          } // 추천 기능 비활성화
+          else {
+            displayPlaces(data);
+          }
         }
       }
+
+      // 지도에 카페 보여주기
       function displayPlaces(places) {
         for (var i = 0; i < places.length; i++) {
           var marker = addMarker(
@@ -253,6 +302,8 @@
           })(marker, places[i]);
         }
       }
+
+      // 마커 추가
       function addMarker(position, order) {
         var imageSrc =
           "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png";
@@ -275,6 +326,16 @@
         markers.push(marker);
         return marker;
       }
+
+      // 모든 마커 지우기 (추천시 초기화 작업 필요)
+      function removeMarker() {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = [];
+      }
+
+      // 카페 마커 클릭 시 상세정보 출력
       function displayPlaceInfo(place) {
         console.log(place);
         var content =
