@@ -137,7 +137,7 @@
             >
           </li>
           <li class="nav-item active">
-            <a class="nav-link" style="color: #ffffff" href="/recommend"
+            <a class="nav-link" style="color: #ffffff" href="javascript:void(0);" onclick="recommend();"
               >Recommend
               <span class="sr-only">(current)</span>
             </a>
@@ -201,6 +201,7 @@
                 click = true;
                 removeMarker();
                 searchPlaces();
+                alert("추천이 활성화 되었습니다.");
               }
             } // 추천 기능 비활성화
             else {
@@ -209,11 +210,11 @@
               click = false;
               removeMarker();
               searchPlaces();
+              alert("추천이 비활성화 되었습니다.");
             }
           },
         });
       }
-
       // 지도 기본설정
       var mapContainer = document.getElementById("map"),
         mapOption = {
@@ -371,7 +372,7 @@
           '    <span class="tel">' +
           place.phone +
           "</span>" +
-          `<a href="/review/${place.id}"><button>후기 작성</button>`;
+          `<a href="/review/${place.id}"><button type="button" class="btn btn-outline-danger" style="font-size:70%;">후기 작성</button>`;
         "</div>" + '<div class="after"></div>';
         contentNode.innerHTML = content;
         placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
