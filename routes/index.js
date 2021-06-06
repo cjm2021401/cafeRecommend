@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 
 var { OAuth2Client } = require("google-auth-library");
 
-var CLIENT_ID =
+const CLIENT_ID =
   "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
 var client = new OAuth2Client(CLIENT_ID);
 var mysql = require("mysql");
@@ -34,12 +34,12 @@ connection.connect();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
-    d: "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com",
+    client_id: CLIENT_ID,
   });
 });
 router.get("/index", function (req, res, next) {
   res.render("index", {
-    d: "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com",
+    client_id: CLIENT_ID,
   });
 });
 
@@ -145,7 +145,9 @@ router.post("/login", (req, res) => {
       connection.query(sql, parameter, function (err) {
         if (err) {
           console.log(err);
-          return res.render("/");
+          return res.render("/", {
+            client_id: CLIENT_ID,
+          });
         } else {
           console.log("새로운 user데이터 입력");
         }
@@ -162,7 +164,9 @@ router.post("/login", (req, res) => {
       connection.query(sql2, parameter2, function (err) {
         if (err) {
           console.log(err);
-          return res.render("/");
+          return res.render("/",{
+            client_id: CLIENT_ID,
+          });
         } else {
           console.log("새로운 PREFERENCE데이터 입력");
         }
@@ -207,7 +211,9 @@ router.get("/map", function (req, res, next) {
   if (req.session.user) {
     res.render("map", { user: req.session.user });
   } else {
-    res.render("/");
+    res.render("/",{
+      client_id: CLIENT_ID,
+    });
   }
 });
 
