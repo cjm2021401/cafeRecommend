@@ -61,19 +61,24 @@ https://2015104153.oss2021.tk:3000
    ```
    npm install
    ```
-6. 발급받은 구글 로그인 ClientID를 `index.js`, `index.ejs`, 지도 API키를 `map.ejs`에 각각 넣기
+6. 발급받은 구글 로그인 ClientID를 `index.js` 지도 API키를 `map.ejs`에 각각 넣기
    ```
    var CLIENT_ID = "발급받은 ClientID"   // index.js
    ```
    
    ```HTML
-   <meta name="google-signin-client_id" content="발급받은 ClientID"> // index.ejs
-   ```
-   
-   ```HTML
    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은API키&libraries=services"></script> // map.ejs
    ```
-7. MySQL connection 연결 설정 (index.js)
+7. Session File Store 설정 (index.js)
+     ```
+     session({
+      secret: "원하는 암호", 
+      resave: false,
+      saveUninitialized: true,
+      store: new FileStore(),
+     })
+   ```     
+8. MySQL connection 연결 설정 (index.js)
      ```
      var connection = mysql.createConnection({
       host: "IP주소 입력 (localhost 또는 AWS 서버 주소)",
@@ -82,7 +87,7 @@ https://2015104153.oss2021.tk:3000
       database: "스키마이름 입력",
      });
    ```
-8. 프로그램 실행
+9. 프로그램 실행
    ```
    npm run start
    ```

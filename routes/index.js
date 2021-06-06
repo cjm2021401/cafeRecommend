@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var { OAuth2Client } = require("google-auth-library");
 
 const CLIENT_ID =
-  "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
+  "발급받은 ClientID";
 var client = new OAuth2Client(CLIENT_ID);
 var mysql = require("mysql");
 const session = require("express-session");
@@ -16,7 +16,7 @@ router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
 router.use(bodyParser.json()); //json방식으로 파싱
 router.use(
   session({
-    secret: "209", // 암호화
+    secret: "원하는 암호", // 암호화
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
@@ -24,10 +24,10 @@ router.use(
 );
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "g79465",
-  database: "caferecommend",
+  host: "IP주소 입력 (localhost 또는 AWS 서버 주소)",
+  user: "계정 입력",
+  password: "암호 입력",
+  database: "스키마이름 입력",
 });
 connection.connect();
 
