@@ -1,88 +1,134 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="google-signin-client_id"
+      content="94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>first</title>
-    <link rel="stylesheet" href="stylesheets/bootstrap.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      integrity="undefined"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        img{
-            max-width: 100%;
-            height: 100% !important;
-        }
-        h1{font-family: 'Noto Sans KR', sans-serif;}
-        h4{font-family: 'Noto Sans KR', sans-serif;}
-        h2{font-family: 'Noto Sans KR', sans-serif;}
-        h3{font-family: 'Noto Sans KR', sans-serif;}
-        h5{font-family: 'Noto Sans KR', sans-serif;}
-        .center{
-            background-color: #848484;
-            margin-right: 20%;
-            margin-left: 20%;
-            margin-top: 5%;
-            text-align:center;
-        }
-        .g-signin2{
-            width: 100%;
-        }
+      img {
+        max-width: 100%;
+        height: 100% !important;
+      }
+      h1 {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h4 {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h2 {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h3 {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h5 {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      .center {
+        background-color: #848484;
+        margin-right: 20%;
+        margin-left: 20%;
+        margin-top: 5%;
+        text-align: center;
+      }
+      .g-signin2 {
+        width: 100%;
+      }
 
-        .g-signin2 > div{
-            margin: 0 auto;
-        }
+      .g-signin2 > div {
+        margin: 0 auto;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/"><img src="images/home.png" width="40" height="40" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/"
+        ><img src="images/home.png" width="40" height="40" alt="" />
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <a class="navbar-brand" href="/" ><strong>Home</strong></a>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="navbar-brand" href="/"><strong>Home</strong></a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-
-            <li class="nav-item active">
-                <a class="nav-link" style="color:#ffffff" href="/" onclick="signOut();">Logout<span class="sr-only">(current)</span></a>
-            </li>
-
+          <li class="nav-item active">
+            <a
+              class="nav-link"
+              style="color: #ffffff"
+              href="/"
+              onclick="signOut();"
+              >Logout<span class="sr-only">(current)</span></a
+            >
+          </li>
         </ul>
+      </div>
+    </nav>
+    <br /><br />
+    <div class="center">
+      <br />
+      <h5 class="display-5 font-weight-bold" style="color: white">
+        Cafe Recommend
+      </h5>
+      <br /><br />
+      <div
+        class="g-signin2"
+        data-onsuccess="onSignIn"
+        -theme="light"
+        data-width="300"
+        data-height="50"
+        data-longtitle="true"
+      >
+        button
+      </div>
+      <br /><br />
     </div>
-</nav>
-<br><br>
-    <div class ="center" >
-        <br>
-        <h5 class="display-5 font-weight-bold" style="color: white">Cafe Recommend</h5>
-        <br><br>
-        <div class="g-signin2" data-onsuccess="onSignIn" -theme="light" data-width="300" data-height="50" data-longtitle="true">button</div>
-        <br><br>
-    </div>
-</body>
+  </body>
 
-
-<script>
+  <script>
     function onSignIn(googleUser) {
-        var id_token = googleUser.getAuthResponse().id_token;
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/index');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function() {
-            console.log('Signed in as: ' + xhr.responseText);
-            if(xhr.responseText == 'success'){
-                signOut();
-                location.assign('/login');
-            }
-        };
-        xhr.send(JSON.stringify({token : id_token}));
+      var id_token = googleUser.getAuthResponse().id_token;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/index");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = function () {
+        console.log("Signed in as: " + xhr.responseText);
+        if (xhr.responseText == "success") {
+          signOut();
+          location.assign("/login");
+        }
+      };
+      xhr.send(JSON.stringify({ token: id_token }));
     }
-</script>
-<script src="javascripts/bootstrap.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  </script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+    integrity="undefined"
+    crossorigin="anonymous"
+  ></script>
 </html>
-
