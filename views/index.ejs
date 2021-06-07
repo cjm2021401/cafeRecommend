@@ -3,22 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta
-      name="google-signin-client_id"
-      content="94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>first</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
-      integrity="undefined"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Cafe Map</title>
+    <meta name="google-signin-client_id" content=<%=client_id%>>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
 
     <style>
       img {
@@ -59,9 +49,6 @@
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/"
-        ><img src="images/home.png" width="40" height="40" alt="" />
-      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -106,8 +93,25 @@
         button
       </div>
       <br /><br />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="navbar-brand" href="/" style="margin-left: 10px"><strong>Home</strong></a>
     </div>
   </body>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+    integrity="undefined"
+    crossorigin="anonymous"
+  ></script>
 
   <script>
     function onSignIn(googleUser) {
@@ -124,11 +128,11 @@
       };
       xhr.send(JSON.stringify({ token: id_token }));
     }
-  </script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
-    integrity="undefined"
-    crossorigin="anonymous"
-  ></script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log("User signed out.");
+        });
+    }
+    </script>
 </html>
