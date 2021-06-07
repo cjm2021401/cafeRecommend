@@ -51,6 +51,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <a class="navbar-brand" href="/" style="margin-left: 10px"><strong>Home</strong></a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a
+                        class="nav-link"
+                        style="color: #ffffff"
+                        href="/map"
+
+                >Map<span class="sr-only"></span></a
+                >
+            </li>
+        </ul>
     </div>
 </nav>
 
@@ -63,9 +74,9 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <hr class="my-4" style="background-color: white">
+            <hr class="my-2" style="background-color: white">
             <form action="/review" method="post">
-                <hr class="my-3" style="background-color: white">
+
                 <label for="cafeId" class="form-label">카페ID</label>
                 <select class="form-select form-select-lg" id="cafeId"  name="cafeId" required>
                   <option value="<%=cafeId%>" selected><%=cafeId%></option>

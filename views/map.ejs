@@ -124,24 +124,34 @@
               data-toggle="modal"
               data-target="#profile"
               ><%=user.nickname%>'s Profile<span class="sr-only"
-                >(current)</span
+                ></span
               ></a
             >
           </li>
+          <li class="nav-item active">
+            <a
+                    class="nav-link"
+                    style="color: #ffffff"
+                    href="#"
+                    onclick="recommend();"
+            >recommend<span class="sr-only"></span></a
+            >
+          </li>
+
           <li class="nav-item active">
             <a
               class="nav-link"
               style="color: #ffffff"
               href="/"
               onclick="signOut();"
-              >Logout<span class="sr-only">(current)</span></a
+              >Logout<span class="sr-only"></span></a
             >
           </li>
         </ul>
       </div>
     </nav>
     <div class="pricing-header px-3 py-1 pt-md-3 pb-md-1 mx-auto text-center">
-      <h3 class="display-6 font-weight-bold">Map</h3>
+      <h1 class="font-weight-bold">Map</h1>
     </div>
     <section id="carousel-3" class="text-center">
       <div class="row">

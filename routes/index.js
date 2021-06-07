@@ -23,7 +23,7 @@ router.use(
 );
 
 var connection = mysql.createConnection({
-  host: "IP주소 입력 (localhost 또는 서버 주소)",
+  host: "IP주소 입력 (localhost 또는 AWS 서버 주소)",
   user: "계정 입력",
   password: "암호 입력",
   database: "스키마이름 입력",
@@ -76,7 +76,7 @@ router.get("/login", checkAuthenticated, (req, res) => {
         req.session.user.nickname = row[0].NICKNAME;
         req.session.user.age = row[0].AGE;
         req.session.user.gender = row[0].GENDER;
-        res.redirect("/map");
+        res.render("map", { user: req.session.user });
       } else {
         return res.render("login", { user: req.session.user, message: "none" });
       }
@@ -171,7 +171,7 @@ router.post("/login", (req, res) => {
         }
       });
 
-      res.redirect("/map");
+      res.render("map", { user: req.session.user });
     }
   });
 });
