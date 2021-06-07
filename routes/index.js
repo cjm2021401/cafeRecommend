@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var { OAuth2Client } = require("google-auth-library");
 
 const CLIENT_ID =
-  "발급받은 ClientID";
+  "94679084723-s5f0686p2porp9mkakrp1p89a48n24nj.apps.googleusercontent.com";
 var client = new OAuth2Client(CLIENT_ID);
 var mysql = require("mysql");
 const session = require("express-session");
@@ -16,7 +16,7 @@ router.use(bodyParser.urlencoded({ extended: false })); //url인코딩 x
 router.use(bodyParser.json()); //json방식으로 파싱
 router.use(
   session({
-    secret: "원하는 암호", // 암호화
+    secret: "원하는암호", // 암호화
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
@@ -77,7 +77,7 @@ router.get("/login", checkAuthenticated, (req, res) => {
         req.session.user.nickname = row[0].NICKNAME;
         req.session.user.age = row[0].AGE;
         req.session.user.gender = row[0].GENDER;
-        return res.render("map", { user: req.session.user });
+        res.redirect("/map");
       } else {
         return res.render("login", { user: req.session.user, message: "none" });
       }
@@ -164,7 +164,7 @@ router.post("/login", (req, res) => {
       connection.query(sql2, parameter2, function (err) {
         if (err) {
           console.log(err);
-          return res.render("/",{
+          return res.render("/", {
             client_id: CLIENT_ID,
           });
         } else {
@@ -172,7 +172,7 @@ router.post("/login", (req, res) => {
         }
       });
 
-      return res.render("map", { user: req.session.user });
+      res.redirect("/map");
     }
   });
 });
@@ -209,11 +209,22 @@ router.get("/logout", function (req, res) {
 router.get("/map", function (req, res, next) {
   // 로그인된 사용자 존재
   if (req.session.user) {
-    res.render("map", { user: req.session.user });
-  } else {
-    res.render("/",{
-      client_id: CLIENT_ID,
+    console.log(req.session.user);
+
+    var sql = "SELECT * FROM USER WHERE EMAIL=?";
+    var parameter = [req.session.user.email];
+
+    connection.query(sql, parameter, function (err, row) {
+      if (err) {
+        console.log(err);
+      } else {
+        req.session.user.nickname = row[0].nickname;
+        req.session.user.age = row[0].age;
+        req.session.user.gender = row[0].gender;
+      }
     });
+
+    res.render("map", { user: req.session.user });
   }
 });
 
