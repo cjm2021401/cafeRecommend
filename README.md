@@ -16,7 +16,7 @@
       <li><a href="#execution">Execution</a></li>
     </ul>
   </li>
-  <li><a href="#usage">Usage</a></li>
+  <li><a href="#function">Function</a></li>
   <li><a href="#contributing">Contributing</a></li>
   <li><a href="#contact">Contact</a></li>
 </ol>
@@ -31,7 +31,7 @@
 
 <!-- DEMO LINK -->
 ## Demo Link
-https://2015104153.oss2021.tk:3000
+https://www.caferecommend.tk:3000
 
 
 <!-- GETTING STARTED -->
@@ -54,23 +54,23 @@ https://2015104153.oss2021.tk:3000
 2. 카카오 Developer 가입 후 애플리케이션 추가 후 Javascript API키 발급 (https://developers.kakao.com/)
 3. sql폴더에 정의된 테이블 생성문 MySQL에서 실행
 4. KHU-HUB repo clone
-   ```
+   ```HTML
    git clone http://khuhub.khu.ac.kr/2015104153/CafeRecommend
    ```
 5. 디렉토리 이동 후 npm 패키지 설치
-   ```
+   ```HTML
    npm install
    ```
 6. 발급받은 구글 로그인 ClientID를 `index.js` 지도 API키를 `map.ejs`에 각각 넣기
-   ```
-   var CLIENT_ID = "발급받은 ClientID"   // index.js
+   ```HTML
+   var CLIENT_ID = "발급받은 ClientID"
    ```
    
    ```HTML
-   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은API키&libraries=services"></script> // map.ejs
+   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=발급받은API키&libraries=services"></script>
    ```
 7. Session File Store 설정 (index.js)
-     ```
+     ```HTML
      session({
       secret: "원하는 암호", 
       resave: false,
@@ -79,7 +79,7 @@ https://2015104153.oss2021.tk:3000
      })
    ```     
 8. MySQL connection 연결 설정 (index.js)
-     ```
+     ```HTML
      var connection = mysql.createConnection({
       host: "IP주소 입력 (localhost 또는 AWS 서버 주소)",
       user: "계정 입력",
@@ -87,13 +87,17 @@ https://2015104153.oss2021.tk:3000
       database: "스키마이름 입력",
      });
    ```
-9. 프로그램 실행
+9. Freenom을 통해 발급받은 도메인을 /bin/www에 넣기
+   ```HTML
+   const domain = "도메인 입력";
    ```
+10. 프로그램 실행
+   ```HTML
    npm run start
    ```
 
-<!-- USAGE -->
-## Usage
+<!-- FUNTION -->
+## Funtion
 1. 로그인 및 회원가입
 2. 지도에서의 카페 보여주기 및 카페추천
 3. 선택된 카페 상세정보 확인 및 후기(점수)등록
