@@ -96,8 +96,8 @@ https://www.caferecommend.tk:3000
    npm run start
    ```
 
-<!-- FUNTION -->
-## Funtion
+<!-- FUNCTION -->
+## Function
 1. 로그인 및 회원가입
 2. 지도에서의 카페 보여주기 및 카페추천
 3. 선택된 카페 상세정보 확인 및 후기(점수)등록
