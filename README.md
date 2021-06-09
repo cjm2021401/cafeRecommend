@@ -25,7 +25,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Capture](http://khuhub.khu.ac.kr/2015104153/CafeRecommend/uploads/bcc05b19d802e109e080a9fd8fd0a629/Capture.JPG)
+![Capture](http://khuhub.khu.ac.kr/2015104153/CafeRecommend/uploads/6389b45b4c980ece750798201b4472ff/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2021-06-09_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_5.20.45.png)
 
 카카오 지도 API를 활용하여 사용자가 원하는 카페들을 지도상에서 추천해주는 서비스 입니다.
 
