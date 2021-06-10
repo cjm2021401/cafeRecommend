@@ -7,6 +7,7 @@
 var app = require("../app");
 var debug = require("debug")("myapp:server");
 var https = require("https");
+var fs=require("fs");
 
 const domain = "도메인 입력";
 const sslport = 3000;
