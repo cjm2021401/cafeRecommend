@@ -377,7 +377,8 @@
           '    <span class="tel">' +
           place.phone +
           "</span>" +
-          `<a href="/review/${place.id}"><button type="button" class="btn btn-outline-danger" style="font-size:70%;">후기 작성</button>`;
+          `<a href="/review/${place.id}"><button type="button" class="btn btn-outline-danger" style="font-size:70%;">후기 작성</button></a>`+
+                `<a href="/map"><button type="button" class="btn btn-outline-danger" style="font-size:30%;">닫기</button></a>`;
         "</div>" + '<div class="after"></div>';
         contentNode.innerHTML = content;
         placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
